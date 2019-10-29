@@ -25,7 +25,7 @@ struct song_node * find(struct song_node *n,char name[100], char artist[100]){
   struct song_node *tofind = n;
   if(n->name == name && n->artist == artist)
     return n;
-  //while(tofind->name != name && tofind->artist != artist)    seg fault
-    //tofind = tofind->next;
+  while(tofind->name != name && tofind->artist != artist)    
+    tofind = tofind->next;
   return tofind;
 }

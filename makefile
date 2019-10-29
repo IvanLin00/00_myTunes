@@ -9,3 +9,6 @@ linked_list.o: linked_list.c linked_list.h
 
 run:
 	./program
+
+clean:
+	rm *.o
