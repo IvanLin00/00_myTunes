@@ -23,9 +23,19 @@ struct song_node * insert_front(struct song_node *n, char name[100], char artist
 //wip
 struct song_node * find(struct song_node *n,char name[100], char artist[100]){
   struct song_node *tofind = n;
-  if(n->name == name && n->artist == artist)
-    return n;
-  while(tofind->name != name && tofind->artist != artist)    
-    tofind = tofind->next;
-  return tofind;
+  while(tofind -> next != NULL){
+    if(tofind->name == name && tofind->artist == artist){
+       return tofind;
+     }
+     tofind = tofind-> next;
+   }
+}
+
+struct song_node * free_list(struct song_node *n){
+  while(n != NULL){
+    struct song_node *freed = n;
+    n = n->next;
+    free(freed);
+  }
+  return n;
 }
