@@ -12,6 +12,12 @@ void print_list(struct song_node *n){
   printf("]\n");
 }
 
+// void print_node(struct song_node *n){
+//   struct song_node *toprint = n;
+//   toprint->next = NULL;
+//   print_list(toprint);
+// }
+
 struct song_node * insert_front(struct song_node *n, char name[100], char artist[100]){
   struct song_node *insert = malloc(sizeof(struct song_node));
   strncpy(insert->name, name, 100);
@@ -23,12 +29,21 @@ struct song_node * insert_front(struct song_node *n, char name[100], char artist
 //wip
 struct song_node * find(struct song_node *n,char name[100], char artist[100]){
   struct song_node *tofind = n;
-  while(tofind -> next != NULL){
-    if(tofind->name == name && tofind->artist == artist){
+  while(tofind != NULL){
+    if(strcmp(tofind->name,name) == 0 && strcmp(tofind->artist, artist) == 0){
        return tofind;
      }
      tofind = tofind-> next;
    }
+}
+
+struct song_node * remove_node(struct song_node *n, char name[100], char artist[100]){\
+  struct song_node *findn = find(n,name,artist);
+  if(findn = n){
+    n = n->next;
+    free(findn);
+  }
+  return n;
 }
 
 struct song_node * free_list(struct song_node *n){
