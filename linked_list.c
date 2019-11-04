@@ -4,18 +4,31 @@
 #include <string.h>
 #include "linked_list.h"
 
+
+//helper function 1
+int listsize(struct song_node *n){
+	if(n == NULL) return 0;
+	return 1 + listsize(n->next);
+}
+
+//helper function 2
+struct song_node * find_node(struct song_node *n, int index){
+	struct song_node *find = n;
+	if(index == 0) return find;
+	return find_node(find->next,index - 1);
+}
+
+//actual functions
 void print_list(struct song_node *n){
-  printf("[ ");
   while(n != NULL){
-    printf("%s : %s, ", n->artist, n->name );
+    printf("%s : %s | ", n->artist, n->name );
     n = n->next;
   }
-  printf("]\n");
+  printf("\n");
 }
 
 void print_node(struct song_node *n){
-  struct song_node *toprint = n;
-  printf("[%s : %s]\n", n->artist, n->name);
+	if (n != NULL) printf("[%s : %s]\n", n->artist, n->name);
 }
 
 struct song_node * insert_front(struct song_node *n, char name[100], char artist[100]){
@@ -25,27 +38,41 @@ struct song_node * insert_front(struct song_node *n, char name[100], char artist
   insert->next = n;
   return insert;
 }
-//need to test
-// struct song_node * order(struct song_node *n, char name[100], char artist[100]){
-// 	struct song_node *insert = malloc(sizeof(struct song_node));
-// 	strncpy(insert->name, name, 100);
-// 	strncpy(insert->artist, artist, 100);
-// 	struct song_node *front = n;
-// 	if(strcmp(front->artist,insert->artist) < 0 && strcmp(front->name,insert->name) < 0){
-// 		insert -> next = n;
-// 		return insert;
-// 	}
-// 	while(front != NULL){
-// 		if(strcmp(front->artist,artist) < 0){
-// 			if(strcmp(front->name,name) < 0){
-// 				break;
-// 			}
-// 		}
-// 		front = front -> next;
-// 	}
-// 	front -> next = insert;
-// 	return front;
-// }
+
+//helper function 3
+struct song_node * insert_node(struct song_node *n, char name[100], char artist[100], int index){
+	struct song_node *insert = malloc(sizeof(struct song_node));
+	strncpy(insert -> name, name, 100);
+	strncpy(insert -> artist, artist, 100);
+	if(index == 0) return insert_front(n, name, artist);
+	struct song_node *temp = find_node(n, index-1)->next;
+	find_node(n, index - 1) -> next = insert;
+	insert -> next = temp;
+	return n;
+}
+
+//other functions
+struct song_node * order(struct song_node *n, char name[100], char artist[100]){
+	 struct song_node *compare;
+	 int lsize = listsize(n);
+	 int insertat = 0;
+	 for(int index = 0; index < lsize; index++){
+		 compare = find_node(n,index);
+		 if(strcmp(artist,compare->artist)<0){
+			 insertat = index;
+			 break;
+		 }
+		 if(strcmp(artist, compare-> artist) ==0 && strcmp(name, compare-> name) < 0){
+			 insertat = index;
+			 break;
+		 }
+		 if(compare->next ==NULL){
+			 return insert_node(n,name,artist,lsize);
+		 }
+	 }
+	 return insert_node(n,name,artist,insertat);
+}
+
 
 struct song_node * find(struct song_node *n,char name[100], char artist[100]){
   struct song_node *tofind = n;
@@ -76,11 +103,12 @@ struct song_node * random_element(struct song_node *n, int num_nodes){
 	}
 	return random_node;
 }
-//wip
-struct song_node * remove_node(struct song_node *n, char name[100], char artist[100]){\
+
+struct song_node * remove_node(struct song_node *n, char name[100], char artist[100]){
   struct song_node *holder = n;
   struct song_node *prev = NULL;
   struct song_node *findn = find(n,name,artist);
+  if(findn == NULL) return n;
   if(findn == n){
     n = n->next;
   }
@@ -103,6 +131,7 @@ struct song_node * free_list(struct song_node *n){
     struct song_node *freed = n;
     n = n->next;
     free(freed);
+	freed = NULL;
   }
   return n;
 }
