@@ -94,8 +94,8 @@ struct song_node * find_artist(struct song_node *n, char artist[100]){
 	}
 }
 
-struct song_node * random_element(struct song_node *n, int num_nodes){
-	int node_index = rand() % num_nodes;
+struct song_node * random_element(struct song_node *n){
+	int node_index = rand() % listsize(n);
 	struct song_node *random_node = n;
 	while (node_index > 0 && random_node != NULL){
 		random_node = random_node -> next;

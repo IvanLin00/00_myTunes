@@ -4,7 +4,7 @@ all: main.o library.o linked_list.o
 main.o: main.c linked_list.h library.h
 	gcc -c main.c
 
-library.o: library.c library.h list.h
+library.o: library.c library.h linked_list.h
 	gcc -c library.c
 
 linked_list.o: linked_list.c linked_list.h

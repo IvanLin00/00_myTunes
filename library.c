@@ -42,6 +42,7 @@ void print_artist(struct song_node *lib[27], char artist[100]){
 
 void print_lib(struct song_node *lib[27]){
 	for(int i = 0; i < 26; i++){
+		if(lib[i] != NULL)
 		print_list(lib[i]);
 	}
 }
